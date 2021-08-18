@@ -1,7 +1,6 @@
 package com.example.authentication.service.imp;
 
 import com.example.authentication.auth.JwtTokenUtil;
-import com.example.authentication.model.CustomerRegistrationModel;
 import com.example.authentication.model.LoginModel;
 import com.example.authentication.model.ResponseModel;
 import com.example.authentication.model.VendorRegisterModel;
@@ -54,6 +53,7 @@ public class VendorAuthServiceImp implements VendorAuthService {
         ResponseModel responseModel;
 
         try {
+            System.out.println("Aaaa");
             //Load the userdetail of the user where emailID = "Example@gmail.com"
             final Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -61,13 +61,14 @@ public class VendorAuthServiceImp implements VendorAuthService {
                             loginModel.getPassword()
                     )
             );
-
+            System.out.println("a");
             SecurityContextHolder.getContext().setAuthentication(authentication);
             Vendor vendor = vendorRepository.findByEmailid(loginModel.getEmailId());
+            System.out.println(vendor);
             final String token = jwtTokenUtil.generateToken(authentication);
 
             //set the Bearer token to AdminUser data
-            vendor.setSession_token(token);
+//            vendor.setSession_token(token);
             //update the adminuser to database with token And ExpirationDate
             vendorRepository.save(vendor);
 
@@ -76,7 +77,8 @@ public class VendorAuthServiceImp implements VendorAuthService {
                     HttpStatus.OK);
 
         } catch (BadCredentialsException ex) {
-            logger.info("Customer login BadCredentialsException ================== {}", ex.getMessage());
+            System.out.println(loginModel);
+            logger.info("vendor login BadCredentialsException ================== {}", ex.getMessage());
             responseModel = commanUtil.create(Message.LOGIN_ERROR,
                     null,
                     HttpStatus.BAD_REQUEST);

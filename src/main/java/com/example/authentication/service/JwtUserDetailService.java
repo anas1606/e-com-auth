@@ -1,7 +1,6 @@
 package com.example.authentication.service;
 
 import com.example.authentication.repository.CustomerRepository;
-import com.example.commanentity.Admin;
 import com.example.commanentity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,7 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;import java.util.Set;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class JwtUserDetailService implements UserDetailsService {
@@ -24,11 +24,13 @@ public class JwtUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Customer user = customerRepository.findByEmailid(username);
         if (user == null) {
-            throw new UsernameNotFoundException("AdminUser not found with username: " + username);
+            throw new UsernameNotFoundException("Customer not found with username: " + username);
         }
         return new User(user.getEmailid(), user.getPassword(),
                 getAuthority());
     }
+
+
 
     private Set<SimpleGrantedAuthority> getAuthority() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
