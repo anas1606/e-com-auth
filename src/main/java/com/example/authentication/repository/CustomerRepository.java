@@ -12,4 +12,7 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     Customer findByEmailid(String email);
 
     int countByEmailid(String email);
+
+    @Query("SELECT count(a.id) FROM Admin a WHERE a.session_token =:token")
+    int countBySessionTokenAndStatus(String token);
 }

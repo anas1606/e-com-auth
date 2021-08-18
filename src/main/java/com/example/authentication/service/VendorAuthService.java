@@ -6,6 +6,7 @@ import com.example.authentication.model.VendorRegisterModel;
 
 public interface VendorAuthService {
 
-    ResponseModel login (LoginModel loginModel);
-    ResponseModel registration (VendorRegisterModel model);
+    ResponseModel login(LoginModel loginModel);
+
+    ResponseModel registration(VendorRegisterModel model);
 }

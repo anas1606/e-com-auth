@@ -3,7 +3,7 @@ package com.example.authentication.controller;
 import com.example.authentication.model.CustomerRegistrationModel;
 import com.example.authentication.model.LoginModel;
 import com.example.authentication.model.ResponseModel;
-import com.example.authentication.service.imp.CustomerAuthServiceImp;
+import com.example.authentication.service.CustomerAuthService;
 import com.example.authentication.util.CommanUtil;
 import com.example.authentication.util.Message;
 import com.example.authentication.util.ObjectMapperUtil;
@@ -24,7 +24,7 @@ public class CustomerAuthController {
     private static final Logger logger = LoggerFactory.getLogger(CustomerAuthController.class);
 
     @Autowired
-    private CustomerAuthServiceImp customerAuthServiceImp;
+    private CustomerAuthService customerAuthService;
 
     @GetMapping("ping")
     public String ping() {
@@ -33,7 +33,7 @@ public class CustomerAuthController {
 
     @PostMapping("login")
     public ResponseModel customerLogin(@RequestBody LoginModel loginModel) {
-        return customerAuthServiceImp.login(loginModel);
+        return customerAuthService.login(loginModel);
     }
 
     @PostMapping("register")
@@ -54,7 +54,7 @@ public class CustomerAuthController {
                 }
             });
             model.setProfileURL(image[0]);
-            return customerAuthServiceImp.registration(model);
+            return customerAuthService.registration(model);
 
         } catch (Exception e) {
             e.printStackTrace();
