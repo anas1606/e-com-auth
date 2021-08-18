@@ -1,6 +1,7 @@
 package com.example.authentication.service.imp;
 
 import com.example.authentication.auth.JwtTokenUtil;
+import com.example.authentication.model.CustomerRegistrationModel;
 import com.example.authentication.model.LoginModel;
 import com.example.authentication.model.ResponseModel;
 import com.example.authentication.model.VendorRegisterModel;
@@ -23,7 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class VendorAuthServiceImp implements VendorAuthService {
@@ -107,20 +107,12 @@ public class VendorAuthServiceImp implements VendorAuthService {
 
                 vendor.setProfile_url(str);
 
-//            Get CustomerAddress object From DTO
-                Company_Address companyAddress = model.getCompanyAddressFromModel();
-                companyAddress.setVendor(vendor);
-//            Fill the Country and State
-//                Country country = countryRepository.findByName(model.getCountry());
-//                if (country != null)
-//                    companyAddress.setCountry(country);
-//                State state = stateRepository.findByName(model.getState());
-//                if (state != null)
-//                    companyAddress.setState(state);
+
                 vendorRepository.save(vendor);
-                comapanyAddressRepository.save(companyAddress);
+                insertAddress(vendor, model);
 
                 return commanUtil.create(Message.CUSTOMER_REGISTER, null, HttpStatus.OK);
+
             } catch (Exception e) {
                 logger.error("Error Will Registration");
                 e.printStackTrace();
@@ -129,5 +121,21 @@ public class VendorAuthServiceImp implements VendorAuthService {
         } else {
             return commanUtil.create(Message.EMAIL_EXIST, null, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private void insertAddress(Vendor vendor, VendorRegisterModel model) {
+
+//            Get CustomerAddress object From DTO
+        Company_Address companyAddress = model.getCompanyAddressFromModel();
+        companyAddress.setVendor(vendor);
+//            Fill the Country and State
+//                Country country = countryRepository.findByName(model.getCountry());
+//                if (country != null)
+//                    companyAddress.setCountry(country);
+//                State state = stateRepository.findByName(model.getState());
+//                if (state != null)
+//                    companyAddress.setState(state);
+
+        comapanyAddressRepository.save(companyAddress);
     }
 }

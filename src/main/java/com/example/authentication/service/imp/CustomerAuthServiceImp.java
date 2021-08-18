@@ -101,7 +101,7 @@ public class CustomerAuthServiceImp implements CustomerAuthService {
 //             check if user exist with email or username
         int exist = customerRepository.countByEmailid(model.getEmailId());
         if (exist == 0) {
-            
+
             try {
 //            get the Customer Object From DTO
                 Customer customer = model.getCustomerFromModel();
@@ -111,13 +111,14 @@ public class CustomerAuthServiceImp implements CustomerAuthService {
 //            Upload the image
                 if (model.getProfileURL() != null)
                     str = new FileUpload().saveFile(folder, model.getProfileURL(), customer.getId());
-
                 customer.setProfile_url(str);
 
+                customer.setEmail_verification_otp(commanUtil.genrateRandomOTP());
                 customerRepository.save(customer);
 
                 insertAddress(customer,model);
                 insertHobby(customer, model.getHobby());
+                commanUtil.sendVerificationEmail(customer.getEmail_verification_otp());
 
                 return commanUtil.create(Message.CUSTOMER_REGISTER, null, HttpStatus.OK);
 
